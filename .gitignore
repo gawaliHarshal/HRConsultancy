@@ -1,0 +1,7 @@
+target/
+Servers/
+.classpath
+.project
+.settings/
+.metadata/
+.DS_Store
