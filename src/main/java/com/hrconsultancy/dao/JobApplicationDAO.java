@@ -9,37 +9,32 @@ import java.util.List;
 import com.hrconsultancy.model.JobApplication;
 import com.hrconsultancy.util.DBConnection;
 
-public class JobApplicationDAO
-{
+public class JobApplicationDAO {
 
-    public boolean applyForJob(JobApplication application)
-    {
+    public boolean applyForJob(JobApplication application) {
         boolean status = false;
 
         String query = "INSERT INTO job_applications (candidate_id, job_id) VALUES (?, ?)";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query))
-        {
+             PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setInt(1, application.getCandidateId());
             ps.setInt(2, application.getJobId());
 
             int rows = ps.executeUpdate();
 
-            if (rows > 0)
-            {
+            if (rows > 0) {
                 status = true;
             }
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return status;
     }
-    
+
     public List<JobApplication> getAllApplications() {
         List<JobApplication> applications = new ArrayList<>();
 
@@ -59,10 +54,8 @@ public class JobApplicationDAO
                 app.setId(rs.getInt("id"));
                 app.setCandidateId(rs.getInt("candidate_id"));
                 app.setJobId(rs.getInt("job_id"));
-                app.setApplicationStatus(rs.getString("application_status"));
+                app.setApplicationStatus(rs.getString("application_status")); // change to "status" if needed
                 app.setAppliedAt(rs.getTimestamp("applied_at"));
-
-                // NEW DATA (temporary, we will store properly next)
                 app.setCandidateName(rs.getString("full_name"));
                 app.setJobTitle(rs.getString("title"));
 
@@ -75,7 +68,7 @@ public class JobApplicationDAO
 
         return applications;
     }
-    
+
     public int getApplicationCount() {
         int count = 0;
         String query = "SELECT COUNT(*) FROM job_applications";
@@ -93,5 +86,52 @@ public class JobApplicationDAO
         }
 
         return count;
+    }
+
+    public boolean hasCandidateApplied(int candidateId, int jobId) {
+        boolean applied = false;
+
+        String sql = "SELECT COUNT(*) FROM job_applications WHERE candidate_id = ? AND job_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, candidateId);
+            ps.setInt(2, jobId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    applied = rs.getInt(1) > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return applied;
+    }
+    
+    public java.util.Set<Integer> getAppliedJobIdsByCandidate(int candidateId) {
+        java.util.Set<Integer> appliedJobIds = new java.util.HashSet<>();
+
+        String sql = "SELECT job_id FROM job_applications WHERE candidate_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, candidateId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    appliedJobIds.add(rs.getInt("job_id"));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return appliedJobIds;
     }
 }

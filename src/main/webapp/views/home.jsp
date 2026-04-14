@@ -1,18 +1,5 @@
 <%@ include file="/views/common/header.jsp" %>
-
-<div class="navbar">
-    <div class="container nav-flex">
-        <div class="brand">HR Consultancy</div>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/home">Home</a>
-			<a href="#">About</a>
-			<a href="#">Services</a>
-			<a href="${pageContext.request.contextPath}/jobs">Jobs</a>   <!-- ADD THIS -->
-			<a href="#">Contact</a>
-			<a href="${pageContext.request.contextPath}/candidate/register">Register as Candidate</a>
-        </div>
-    </div>
-</div>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=1">
 
 <section class="hero" id="home">
     <div class="container">

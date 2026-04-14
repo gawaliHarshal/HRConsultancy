@@ -36,15 +36,21 @@ public class CandidateRegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String qualification = request.getParameter("qualification");
-        int experienceYears = Integer.parseInt(request.getParameter("experienceYears"));
+        String experienceYears = request.getParameter("experienceYears");
+        if (experienceYears != null) {
+            experienceYears = experienceYears.trim();
+        }
         String skills = request.getParameter("skills");
+        String password = request.getParameter("password");
 
-        Candidate candidate = new Candidate(fullName, email, phone, qualification, experienceYears, skills);
+        Candidate candidate = new Candidate(fullName, email, phone, qualification, experienceYears, skills, password);
 
         boolean status = candidateDAO.saveCandidate(candidate);
+        System.out.println("Registering: " + email);
 
         if (status) {
-            response.sendRedirect(request.getContextPath() + "/candidate/register?success=1");
+        	response.sendRedirect(request.getContextPath() + "/candidate/login?registered=1");
+            
         } else {
             response.sendRedirect(request.getContextPath() + "/candidate/register?error=1");
         }

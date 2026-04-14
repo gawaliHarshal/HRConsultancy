@@ -9,20 +9,22 @@ public class Candidate {
     private String email;
     private String phone;
     private String qualification;
-    private int experienceYears;
+    private String experienceYears;
     private String skills;
+    private String password;
     private Timestamp createdAt;
 
     public Candidate() {
     }
 
-    public Candidate(String fullName, String email, String phone, String qualification, int experienceYears, String skills) {
+    public Candidate(String fullName, String email, String phone, String qualification, String experienceYears, String skills, String password) {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.qualification = qualification;
         this.experienceYears = experienceYears;
         this.skills = skills;
+        this.password = password;
     }
 
     public int getId() {
@@ -65,11 +67,11 @@ public class Candidate {
         this.qualification = qualification;
     }
 
-    public int getExperienceYears() {
+    public String getExperienceYears() {
         return experienceYears;
     }
 
-    public void setExperienceYears(int experienceYears) {
+    public void setExperienceYears(String experienceYears) {
         this.experienceYears = experienceYears;
     }
 
@@ -79,6 +81,14 @@ public class Candidate {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Timestamp getCreatedAt() {

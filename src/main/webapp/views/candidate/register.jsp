@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Candidate Registration</title>
-     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css"> 
+     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=1">
   
 </head>
 <body>
@@ -49,13 +49,18 @@
 
                 <div>
                     <label>Experience (Years)</label>
-                    <input type="number" name="experienceYears" min="0" value="0" required>
+                    <input type="text" name="experienceYears" min="0" value="0" required>
                 </div>
 
                 <div>
                     <label>Skills</label>
                     <textarea name="skills" rows="4"></textarea>
                 </div>
+                
+	            <div>
+					    <label>Password</label>
+					    <input type="password" name="password" required>
+				</div>
 
                 <div>
                     <button type="submit">Register</button>

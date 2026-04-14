@@ -1,9 +1,13 @@
 package com.hrconsultancy.controller;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.hrconsultancy.dao.JobApplicationDAO;
 import com.hrconsultancy.dao.JobDAO;
+import com.hrconsultancy.model.Candidate;
 import com.hrconsultancy.model.Job;
 
 import jakarta.servlet.ServletException;
@@ -11,16 +15,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/jobs")
 public class JobServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private JobDAO jobDAO;
+    private JobApplicationDAO jobApplicationDAO;
 
     @Override
     public void init() throws ServletException {
         jobDAO = new JobDAO();
+        jobApplicationDAO = new JobApplicationDAO();
     }
 
     @Override
@@ -29,6 +36,17 @@ public class JobServlet extends HttpServlet {
 
         List<Job> jobs = jobDAO.getAllJobs();
         request.setAttribute("jobs", jobs);
+
+        Set<Integer> appliedJobIds = new HashSet<>();
+
+        HttpSession session = request.getSession(false);
+        Candidate candidate = (session != null) ? (Candidate) session.getAttribute("candidate") : null;
+
+        if (candidate != null) {
+            appliedJobIds = jobApplicationDAO.getAppliedJobIdsByCandidate(candidate.getId());
+        }
+
+        request.setAttribute("appliedJobIds", appliedJobIds);
 
         request.getRequestDispatcher("/views/jobs.jsp").forward(request, response);
     }
