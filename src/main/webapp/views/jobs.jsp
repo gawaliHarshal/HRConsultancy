@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Set" %>
-<%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>s
 <%@ page import="com.hrconsultancy.model.Job" %>
 
 <!DOCTYPE html>
@@ -35,15 +35,17 @@
 
             <%
                 List<Job> jobs = (List<Job>) request.getAttribute("jobs");
-                Set<Integer> appliedJobIds = (Set<Integer>) request.getAttribute("appliedJobIds");
+                		Map<Integer, String> applicationStatusMap =
+                			    (Map<Integer, String>) request.getAttribute("applicationStatusMap");
 
-                if (appliedJobIds == null) {
-                    appliedJobIds = new HashSet<>();
-                }
+                			if (applicationStatusMap == null) {
+                			    applicationStatusMap = new HashMap<>();
+                			}
 
                 if (jobs != null && !jobs.isEmpty()) {
                     for (Job job : jobs) {
-                        boolean applied = appliedJobIds.contains(job.getId());
+                    	String status = applicationStatusMap.get(job.getId());
+                    	boolean applied = status != null;
             %>
                 <div class="job-card" style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
                     <h3><%= job.getTitle() %></h3>
@@ -53,11 +55,11 @@
                     <p><strong>Experience:</strong> <%= job.getExperienceRequired() %></p>
                     <p><strong>Description:</strong> <%= job.getDescription() %></p>
 
-                    <% if (applied) { %>
-                        <button type="button" disabled style="margin-top:10px; background-color:gray; color:white; padding:8px 16px; border:none; cursor:not-allowed;">
-                            Applied
-                        </button>
-                    <% } else { %>
+					   <% if (applied) { %>
+					    <button type="button" disabled style="background-color:gray; color:white;">
+					        <%= status %>
+					    </button>
+						<% } else { %>
                         <form action="${pageContext.request.contextPath}/apply-job" method="post" style="margin-top:10px;">
                             <input type="hidden" name="jobId" value="<%= job.getId() %>">
                             <button type="submit">Apply Now</button>

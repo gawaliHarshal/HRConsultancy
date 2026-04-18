@@ -1,8 +1,10 @@
 package com.hrconsultancy.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.hrconsultancy.dao.JobApplicationDAO;
@@ -37,17 +39,16 @@ public class JobServlet extends HttpServlet {
         List<Job> jobs = jobDAO.getAllJobs();
         request.setAttribute("jobs", jobs);
 
-        Set<Integer> appliedJobIds = new HashSet<>();
+        Map<Integer, String> applicationStatusMap = new HashMap<>();
 
         HttpSession session = request.getSession(false);
         Candidate candidate = (session != null) ? (Candidate) session.getAttribute("candidate") : null;
 
         if (candidate != null) {
-            appliedJobIds = jobApplicationDAO.getAppliedJobIdsByCandidate(candidate.getId());
+            applicationStatusMap = jobApplicationDAO.getApplicationStatusByCandidate(candidate.getId());
         }
 
-        request.setAttribute("appliedJobIds", appliedJobIds);
-
+        request.setAttribute("applicationStatusMap", applicationStatusMap);
         request.getRequestDispatcher("/views/jobs.jsp").forward(request, response);
     }
 }

@@ -23,8 +23,9 @@
             <th>ID</th>
             <th>Candidate Name</th>
             <th>Job Title</th>
-            <th>Status</th>
-            <th>Applied At</th>
+           <th>Status</th>
+			<th>Update</th>
+			<th>Applied At</th>
         </tr>
 
         <%
@@ -35,7 +36,23 @@
             <td><%= app.getCandidateName() %></td>
             <td><%= app.getJobTitle() %></td>
             <td><%= app.getApplicationStatus() %></td>
-            <td><%= app.getAppliedAt() %></td>
+
+			<td>
+			    <form action="${pageContext.request.contextPath}/admin/applications/update-status" method="post">
+			        <input type="hidden" name="id" value="<%= app.getId() %>">
+			
+			        <select name="status">
+			            <option value="Pending" <%= "Pending".equals(app.getApplicationStatus()) ? "selected" : "" %>>Pending</option>
+			            <option value="Shortlisted" <%= "Shortlisted".equals(app.getApplicationStatus()) ? "selected" : "" %>>Shortlisted</option>
+			            <option value="Rejected" <%= "Rejected".equals(app.getApplicationStatus()) ? "selected" : "" %>>Rejected</option>
+			            <option value="Selected" <%= "Selected".equals(app.getApplicationStatus()) ? "selected" : "" %>>Selected</option>
+			        </select>
+			
+			        <button type="submit">Update</button>
+			    </form>
+			</td>
+			
+			<td><%= app.getAppliedAt() %></td>
         </tr>
         <%
             }

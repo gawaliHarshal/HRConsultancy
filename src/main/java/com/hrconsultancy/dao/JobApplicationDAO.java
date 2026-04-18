@@ -14,13 +14,14 @@ public class JobApplicationDAO {
     public boolean applyForJob(JobApplication application) {
         boolean status = false;
 
-        String query = "INSERT INTO job_applications (candidate_id, job_id) VALUES (?, ?)";
+        String query = "INSERT INTO job_applications (candidate_id, job_id, application_status) VALUES (?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setInt(1, application.getCandidateId());
-            ps.setInt(2, application.getJobId());
+        	ps.setInt(1, application.getCandidateId());
+        	ps.setInt(2, application.getJobId());
+        	ps.setString(3, "Pending");
 
             int rows = ps.executeUpdate();
 
@@ -133,5 +134,52 @@ public class JobApplicationDAO {
         }
 
         return appliedJobIds;
+    }
+    
+    public boolean updateApplicationStatus(int id, String status) {
+        boolean result = false;
+
+        String sql = "UPDATE job_applications SET application_status = ? WHERE id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, id);
+
+            int rows = ps.executeUpdate();
+            result = rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    
+    public java.util.Map<Integer, String> getApplicationStatusByCandidate(int candidateId) {
+        java.util.Map<Integer, String> statusMap = new java.util.HashMap<>();
+
+        String sql = "SELECT job_id, application_status FROM job_applications WHERE candidate_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, candidateId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    statusMap.put(
+                        rs.getInt("job_id"),
+                        rs.getString("application_status")
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return statusMap;
     }
 }
