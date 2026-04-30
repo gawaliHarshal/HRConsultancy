@@ -14,17 +14,37 @@
             </a>
         </div>
 
-        <nav class="navbar">
-            <a href="${pageContext.request.contextPath}/home" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
-            <a href="${pageContext.request.contextPath}/jobs" style="color:white; margin-right:15px; text-decoration:none;">Jobs</a>
-            <a href="${pageContext.request.contextPath}/candidate/register" style="color:white; margin-right:15px; text-decoration:none;">Register</a>
+       <nav class="navbar">
+    <a href="${pageContext.request.contextPath}/home" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
+    <a href="${pageContext.request.contextPath}/jobs" style="color:white; margin-right:15px; text-decoration:none;">Jobs</a>
 
-            <% if (loggedInCandidate != null) { %>
-                <span style="margin-right:15px;">Welcome, <%= loggedInCandidate.getFullName() %></span>
-                <a href="${pageContext.request.contextPath}/candidate/logout" style="color:white; text-decoration:none;">Logout</a>
-            <% } else { %>
-                <a href="${pageContext.request.contextPath}/candidate/login" style="color:white; text-decoration:none;">Login</a>
-            <% } %>
-        </nav>
+    <% if (loggedInCandidate != null) { %>
+
+        <a href="${pageContext.request.contextPath}/candidate/applications"
+           style="color:white; margin-right:15px; text-decoration:none;">
+           My Applications
+        </a>
+
+        <span style="margin-right:15px;">Welcome, <%= loggedInCandidate.getFullName() %></span>
+
+        <a href="${pageContext.request.contextPath}/candidate/logout"
+           style="color:white; text-decoration:none;">
+           Logout
+        </a>
+
+    <% } else { %>
+
+        <a href="${pageContext.request.contextPath}/candidate/register"
+           style="color:white; margin-right:15px; text-decoration:none;">
+           Register
+        </a>
+
+        <a href="${pageContext.request.contextPath}/candidate/login"
+           style="color:white; text-decoration:none;">
+           Login
+        </a>
+
+    <% } %>
+</nav>
     </div>
 </header>

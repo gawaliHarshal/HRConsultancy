@@ -43,7 +43,9 @@ public class CandidateRegisterServlet extends HttpServlet {
         String skills = request.getParameter("skills");
         String password = request.getParameter("password");
 
-        Candidate candidate = new Candidate(fullName, email, phone, qualification, experienceYears, skills, password);
+        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password,org.mindrot.jbcrypt.BCrypt.gensalt());
+
+        Candidate candidate = new Candidate(fullName, email, phone, qualification, experienceYears, skills, hashedPassword);
 
         boolean status = candidateDAO.saveCandidate(candidate);
         System.out.println("Registering: " + email);

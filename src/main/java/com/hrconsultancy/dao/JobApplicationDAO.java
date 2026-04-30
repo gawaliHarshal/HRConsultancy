@@ -182,4 +182,40 @@ public class JobApplicationDAO {
 
         return statusMap;
     }
+    
+    public List<JobApplication> getApplicationsByCandidateId(int candidateId) {
+        List<JobApplication> applications = new ArrayList<>();
+
+        String sql = "SELECT ja.*, j.title " +
+                     "FROM job_applications ja " +
+                     "JOIN jobs j ON ja.job_id = j.id " +
+                     "WHERE ja.candidate_id = ? " +
+                     "ORDER BY ja.applied_at DESC";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, candidateId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    JobApplication app = new JobApplication();
+
+                    app.setId(rs.getInt("id"));
+                    app.setCandidateId(rs.getInt("candidate_id"));
+                    app.setJobId(rs.getInt("job_id"));
+                    app.setApplicationStatus(rs.getString("application_status"));
+                    app.setAppliedAt(rs.getTimestamp("applied_at"));
+                    app.setJobTitle(rs.getString("title"));
+
+                    applications.add(app);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return applications;
+    }
 }

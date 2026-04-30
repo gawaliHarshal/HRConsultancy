@@ -2,6 +2,8 @@ package com.hrconsultancy.controller;
 
 import java.io.IOException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.hrconsultancy.dao.CandidateDAO;
 import com.hrconsultancy.model.Candidate;
 
@@ -26,7 +28,6 @@ public class CandidateLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         request.getRequestDispatcher("/views/candidate/login.jsp").forward(request, response);
     }
 
@@ -45,14 +46,15 @@ public class CandidateLoginServlet extends HttpServlet {
             password = password.trim();
         }
 
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/candidate/login?error=empty");
             return;
         }
 
-        Candidate candidate = candidateDAO.getCandidateByEmailAndPassword(email, password);
+        Candidate candidate = candidateDAO.getCandidateByEmail(email);
 
-        if (candidate != null) {
+        if (candidate != null && BCrypt.checkpw(password, candidate.getPassword())) {
+
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
                 oldSession.invalidate();
@@ -62,8 +64,11 @@ public class CandidateLoginServlet extends HttpServlet {
             newSession.setAttribute("candidate", candidate);
 
             response.sendRedirect(request.getContextPath() + "/jobs?login=success");
+            return;
+
         } else {
             response.sendRedirect(request.getContextPath() + "/candidate/login?error=invalid");
+            return;
         }
     }
 }

@@ -29,10 +29,7 @@ public class CandidateDAO {
             ps.setString(7, candidate.getPassword());
 
             int rows = ps.executeUpdate();
-
-            if (rows > 0) {
-                status = true;
-            }
+            status = rows > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,6 +71,7 @@ public class CandidateDAO {
 
     public int getCandidateCount() {
         int count = 0;
+
         String query = "SELECT COUNT(*) FROM candidates";
 
         try (Connection con = DBConnection.getConnection();
@@ -91,20 +89,20 @@ public class CandidateDAO {
         return count;
     }
 
-    public Candidate getCandidateByEmailAndPassword(String email, String password) {
+    public Candidate getCandidateByEmail(String email) {
         Candidate candidate = null;
 
-        String sql = "SELECT * FROM candidates WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM candidates WHERE email = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     candidate = new Candidate();
+
                     candidate.setId(rs.getInt("id"));
                     candidate.setFullName(rs.getString("full_name"));
                     candidate.setEmail(rs.getString("email"));
