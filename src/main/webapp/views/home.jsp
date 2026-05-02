@@ -1,24 +1,37 @@
 <%@ include file="/views/common/header.jsp" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=2">
 
+<!-- HERO -->
 <section class="hero" id="home">
     <div class="container">
-        <h1>Connecting Talent with Opportunity</h1>
-        <p>Professional HR consultancy and recruitment solutions for employers and job seekers.</p>
+        <h1>
+            Find the right talent, <span>faster</span>
+        </h1>
+        <p>
+            We connect companies with skilled professionals across industries,
+            making hiring simple, fast, and reliable.
+        </p>
+
         <a href="#services" class="btn">Explore Services</a>
     </div>
 </section>
 
+<!-- ABOUT -->
 <section id="about" class="section">
     <div class="container">
         <h2>About Us</h2>
-        <p>We help businesses hire the right people and help candidates find the right career opportunities through reliable recruitment and HR support.</p>
+        <p>
+            We help businesses hire the right people and help candidates find
+            the right career opportunities through reliable recruitment and HR support.
+        </p>
     </div>
 </section>
 
+<!-- SERVICES -->
 <section id="services" class="section light-section">
     <div class="container">
         <h2>Our Services</h2>
+
         <div class="service-grid">
             <%
                 java.util.List<com.hrconsultancy.model.Service> serviceList =
@@ -39,13 +52,21 @@
     </div>
 </section>
 
+<!-- JOBS PREVIEW -->
 <section id="jobs" class="section">
     <div class="container">
         <h2>Latest Jobs</h2>
-        <p>Dynamic job listings will be shown here in the next phase.</p>
+        <p>Explore opportunities curated for you.</p>
+
+        <div style="margin-top:20px;">
+            <a href="${pageContext.request.contextPath}/jobs" class="btn">
+                View All Jobs
+            </a>
+        </div>
     </div>
 </section>
 
+<!-- CONTACT -->
 <section id="contact" class="section light-section">
     <div class="container">
         <h2>Contact Us</h2>
@@ -55,11 +76,11 @@
             String error = request.getParameter("error");
             if ("1".equals(success)) {
         %>
-            <p style="color: green; font-weight: bold;">Message sent successfully.</p>
+            <p class="alert-success">Message sent successfully.</p>
         <%
             } else if ("1".equals(error)) {
         %>
-            <p style="color: red; font-weight: bold;">Something went wrong. Please try again.</p>
+            <p class="alert-error">Something went wrong. Please try again.</p>
         <%
             }
         %>
@@ -68,7 +89,8 @@
             <input type="text" name="name" placeholder="Enter your name" required>
             <input type="email" name="email" placeholder="Enter your email" required>
             <textarea name="message" rows="5" placeholder="Enter your message" required></textarea>
-            <button type="submit" class="btn">Send Message</button>
+
+            <button type="submit">Send Message</button>
         </form>
     </div>
 </section>

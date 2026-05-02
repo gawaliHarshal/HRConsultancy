@@ -1,50 +1,65 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.hrconsultancy.model.Candidate" %>
+<%@ page import="com.hrconsultancy.model.Admin" %>
 
 <%
     Candidate loggedInCandidate = (Candidate) session.getAttribute("candidate");
+    Admin loggedInAdmin = (Admin) session.getAttribute("admin");
 %>
 
-<header class="site-header" style="background:#222; padding:15px 0;">
-    <div class="container" style="display:flex; justify-content:space-between; align-items:center; color:white;">
-        
+<header class="site-header">
+    <div class="container">
+
         <div class="logo">
-            <a href="${pageContext.request.contextPath}/home" style="color:white; text-decoration:none; font-size:22px; font-weight:bold;">
+            <a href="${pageContext.request.contextPath}/home">
                 HR Consultancy
             </a>
         </div>
 
-       <nav class="navbar">
-    <a href="${pageContext.request.contextPath}/home" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
-    <a href="${pageContext.request.contextPath}/jobs" style="color:white; margin-right:15px; text-decoration:none;">Jobs</a>
+        <nav class="navbar">
 
-    <% if (loggedInCandidate != null) { %>
+            <a href="${pageContext.request.contextPath}/home">Home</a>
+            <a href="${pageContext.request.contextPath}/jobs">Jobs</a>
 
-        <a href="${pageContext.request.contextPath}/candidate/applications"
-           style="color:white; margin-right:15px; text-decoration:none;">
-           My Applications
-        </a>
+            <%-- 🔥 ADMIN VIEW --%>
+            <% if (loggedInAdmin != null) { %>
 
-        <span style="margin-right:15px;">Welcome, <%= loggedInCandidate.getFullName() %></span>
+                <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
+                <a href="${pageContext.request.contextPath}/admin/jobs">Jobs</a>
+                <a href="${pageContext.request.contextPath}/admin/services">Services</a>
 
-        <a href="${pageContext.request.contextPath}/candidate/logout"
-           style="color:white; text-decoration:none;">
-           Logout
-        </a>
+                <span>Admin: <%= loggedInAdmin.getUsername() %></span>
 
-    <% } else { %>
+                <a href="${pageContext.request.contextPath}/admin/logout">
+                    Logout
+                </a>
 
-        <a href="${pageContext.request.contextPath}/candidate/register"
-           style="color:white; margin-right:15px; text-decoration:none;">
-           Register
-        </a>
+            <%-- 👤 CANDIDATE VIEW --%>
+            <% } else if (loggedInCandidate != null) { %>
 
-        <a href="${pageContext.request.contextPath}/candidate/login"
-           style="color:white; text-decoration:none;">
-           Login
-        </a>
+                <a href="${pageContext.request.contextPath}/candidate/applications">
+                    My Applications
+                </a>
 
-    <% } %>
-</nav>
+                <span>Hi, <%= loggedInCandidate.getFullName() %></span>
+
+                <a href="${pageContext.request.contextPath}/candidate/logout">
+                    Logout
+                </a>
+
+            <%-- 🚫 NOT LOGGED IN --%>
+            <% } else { %>
+
+                <a href="${pageContext.request.contextPath}/candidate/register">
+                    Register
+                </a>
+
+                <a href="${pageContext.request.contextPath}/candidate/login">
+                    Login
+                </a>
+
+            <% } %>
+
+        </nav>
     </div>
 </header>
