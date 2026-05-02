@@ -21,8 +21,15 @@ public class AdminServiceServlet extends HttpServlet {
     }
 
     @Override
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("admin") == null) {
+            response.sendRedirect(request.getContextPath() + "/admin/login");
+            return;
+        }
 
         List<Service> services = serviceDAO.getAllServices();
         request.setAttribute("services", services);

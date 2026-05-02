@@ -19,8 +19,15 @@ public class AdminEditServiceServlet extends HttpServlet {
     }
 
     @Override
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, jakarta.servlet.ServletException {
+    	HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("admin") == null) {
+            response.sendRedirect(request.getContextPath() + "/admin/login");
+            return;
+        }
 
         int id = Integer.parseInt(request.getParameter("id"));
         Service service = dao.getServiceById(id);
